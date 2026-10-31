@@ -50,14 +50,26 @@ class DailyEditionEngine {
 
   /**
    * O's Dan 주제 전용: 오늘의 날짜에 해당하는 단 하나의 '오늘의 단어' 반환
+   * - 연도별 고유 시드로 전체 단어장을 완벽히 섞은(Fisher-Yates Shuffle) 뒤,
+   *   그해의 날짜 순서(Day of Year)에 따라 하루에 하나씩 꺼내므로 매일 겹치지 않고 새로운 단어가 나옵니다.
    */
   getOsDanTodayPick(dateObj = new Date()) {
     const dateKey = this.formatDateKey(dateObj);
     const dotDate = this.formatDotDate(dateObj);
-    const allEntries = this.getAllLocalEntries();
+    const allEntries = [...this.getAllLocalEntries()];
 
-    const rng = this.createSeededRng(this.hashDateString(`OSDAN-TODAY-${dateKey}`));
-    const index = Math.floor(rng() * allEntries.length);
+    const year = dateObj.getFullYear();
+    const startOfYear = new Date(year, 0, 0);
+    const dayOfYear = Math.floor((dateObj - startOfYear) / 86400000);
+
+    // 해당 연도의 시드로 단어장 전체를 결정론적으로 셔플
+    const rng = this.createSeededRng(this.hashDateString(`OSDAN-YEAR-${year}`));
+    for (let i = allEntries.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [allEntries[i], allEntries[j]] = [allEntries[j], allEntries[i]];
+    }
+
+    const index = dayOfYear % allEntries.length;
 
     return {
       dateKey,
