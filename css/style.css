@@ -1,0 +1,450 @@
+/* =========================================================
+   O's Dan — Pure White & Three-Blue Curve Minimal Design
+   ========================================================= */
+
+:root {
+  --bg-white: #ffffff;
+  --blue-deep: #1d4ed8;
+  --blue-mid: #0ea5e9;
+  --blue-sky: #38bdf8;
+  --blue-light: #bae6fd;
+  --blue-ice: #f0f9ff;
+
+  --text-main: #0f172a;
+  --text-sub: #475569;
+  --text-muted: #94a3b8;
+
+  --font-brand: "Outfit", "Pretendard", sans-serif;
+  --font-serif: "Noto Serif KR", Georgia, serif;
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-white);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   상단 헤더 (중앙 O's Dan 로고 + 우측 상단 햄버거 버튼 & 드롭다운)
+   ========================================================= */
+.site-header {
+  position: relative;
+  z-index: 40;
+  width: 100%;
+  padding: 1.75rem 2.25rem;
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+}
+
+.header-spacer {
+  width: 44px;
+  height: 44px;
+}
+
+.brand-logo {
+  justify-self: center;
+  text-align: center;
+  font-family: var(--font-brand);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 65%, var(--blue-sky) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  user-select: none;
+  cursor: pointer;
+}
+
+.menu-container {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 우측 상단 3줄 햄버거 버튼 */
+.hamburger-btn {
+  position: relative;
+  z-index: 45;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.hamburger-btn:hover,
+.hamburger-btn.open {
+  background-color: var(--blue-ice);
+  border-color: var(--blue-light);
+}
+
+.hamburger-btn .bar {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  border-radius: 999px;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+
+/* 햄버거 줄 3개에 푸른 계열 3가지 색 적용 */
+.hamburger-btn .bar:nth-child(1) {
+  background-color: var(--blue-deep);
+}
+.hamburger-btn .bar:nth-child(2) {
+  background-color: var(--blue-mid);
+}
+.hamburger-btn .bar:nth-child(3) {
+  background-color: var(--blue-sky);
+}
+
+/* 햄버거 버튼 열림(X) 상태 */
+.hamburger-btn.open .bar:nth-child(1) {
+  transform: translateY(7.5px) rotate(45deg);
+}
+.hamburger-btn.open .bar:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-btn.open .bar:nth-child(3) {
+  transform: translateY(-7.5px) rotate(-45deg);
+}
+
+/* =========================================================
+   오른쪽에 주르륵 뜨는 주제 목록
+   ========================================================= */
+.topic-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 260px;
+  background: var(--bg-white);
+  border: 2px solid var(--blue-light);
+  border-radius: 26px;
+  padding: 1.1rem 0.9rem;
+  box-shadow:
+    0 20px 50px rgba(14, 165, 233, 0.14),
+    0 6px 18px rgba(29, 78, 216, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) scale(0.97);
+  transform-origin: top right;
+  transition:
+    opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.24s;
+}
+
+.topic-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.topic-dropdown-header {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--blue-mid);
+  padding: 0.2rem 0.85rem 0.65rem;
+  border-bottom: 1px solid rgba(186, 230, 253, 0.6);
+  margin-bottom: 0.45rem;
+}
+
+.topic-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+/* 메뉴가 열릴 때 위에서 아래로 주르륵 뜨는 스태거 애니메이션 */
+.topic-item {
+  opacity: 0;
+  transform: translateX(12px);
+  transition:
+    opacity 0.26s ease,
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--item-idx, 0) * 38ms);
+}
+
+.topic-dropdown.open .topic-item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.topic-link {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.68rem 0.9rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-sans);
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.topic-link:hover {
+  background-color: var(--blue-ice);
+  color: var(--blue-deep);
+  transform: translateX(3px);
+}
+
+.topic-link.active {
+  background: linear-gradient(90deg, rgba(186, 230, 253, 0.55) 0%, rgba(240, 249, 255, 0.9) 100%);
+  color: var(--blue-deep);
+  font-weight: 700;
+}
+
+.topic-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-osdan {
+  background: linear-gradient(135deg, var(--blue-deep), var(--blue-sky));
+}
+.dot-all { background-color: var(--blue-deep); }
+.dot-word { background-color: var(--blue-mid); }
+.dot-wiki { background-color: var(--blue-sky); }
+.dot-science { background-color: #2563eb; }
+.dot-humanities { background-color: #0284c7; }
+.dot-system { background-color: #60a5fa; }
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: transparent;
+  display: none;
+}
+
+.menu-backdrop.open {
+  display: block;
+}
+
+/* =========================================================
+   중앙 스테이지 (좌우 < > 화살표 + 가운데 사각형 카드)
+   ========================================================= */
+.center-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.stage-row {
+  width: 100%;
+  max-width: 820px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+/* 좌우 < > 화살표 버튼 */
+.side-arrow-btn {
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid var(--blue-light);
+  background: var(--bg-white);
+  color: var(--blue-deep);
+  font-family: var(--font-brand);
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  box-shadow:
+    0 10px 25px rgba(14, 165, 233, 0.1),
+    0 3px 10px rgba(29, 78, 216, 0.05);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s ease;
+}
+
+.side-arrow-btn:hover {
+  background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+  border-color: var(--blue-deep);
+  color: #ffffff;
+  transform: scale(1.07);
+  box-shadow: 0 14px 30px rgba(29, 78, 216, 0.22);
+}
+
+.side-arrow-btn:active {
+  transform: scale(0.95);
+}
+
+.side-arrow-btn.hidden {
+  display: none;
+}
+
+.today-card-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  background: var(--bg-white);
+  border-radius: 48px;
+  padding: 0.5rem 2rem;
+  text-align: center;
+  border: 2px solid var(--blue-light);
+  box-shadow:
+    0 24px 60px rgba(14, 165, 233, 0.08),
+    0 6px 20px rgba(29, 78, 216, 0.05);
+  overflow: hidden;
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
+}
+
+/* 주제/단어 전환 시 부드러운 애니메이션 */
+.today-card-wrap.switching {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+}
+
+.curve-art {
+  width: 100%;
+  height: 76px;
+  display: block;
+  pointer-events: none;
+}
+
+.today-content {
+  padding: 1.2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.today-date {
+  font-family: var(--font-brand);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--blue-mid);
+  margin-bottom: 0.65rem;
+}
+
+.today-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.today-spectrum-pill {
+  display: inline-block;
+  padding: 0.28rem 0.85rem;
+  border-radius: 999px;
+  background-color: var(--blue-deep);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.today-category {
+  display: inline-block;
+  padding: 0.28rem 0.9rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(186, 230, 253, 0.48), rgba(56, 189, 248, 0.2));
+  color: var(--blue-deep);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.today-word {
+  font-family: var(--font-serif);
+  font-size: clamp(2.3rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  word-break: keep-all;
+  margin-bottom: 0.45rem;
+}
+
+.today-subtitle {
+  font-family: var(--font-brand);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1.35rem;
+}
+
+.today-desc {
+  max-width: 46ch;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text-sub);
+  word-break: keep-all;
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    padding: 1.25rem 1.25rem;
+  }
+  .stage-row {
+    gap: 0.6rem;
+  }
+  .side-arrow-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 1.3rem;
+  }
+  .today-card-wrap {
+    border-radius: 36px;
+    padding: 0.25rem 1.15rem;
+  }
+  .curve-art {
+    height: 54px;
+  }
+  .topic-dropdown {
+    width: 235px;
+  }
+}

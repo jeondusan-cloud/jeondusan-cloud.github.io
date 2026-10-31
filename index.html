@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O's Dan — 오늘의 단어와 랜덤 주제 추출</title>
+  <meta name="description" content="O's Dan — 매일 새롭게 마주하는 오늘의 단어와 주제. 글이나 그림의 영감, 과학·수학·철학·시스템 사고의 신선한 자극을 위한 주제·단어 추출 사이트." />
+  <meta name="keywords" content="O's Dan, 오즈단, 오늘의 단어, 랜덤 단어 추출, 랜덤 주제 추출, 글감 추천, 그림 주제, 창의력 자극, 순우리말, 과학 개념, 철학 주제" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://jeondusan-cloud.github.io/odan/" />
+
+  <!-- 카카오톡 / SNS 공유 미리보기 (Open Graph) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="O's Dan" />
+  <meta property="og:title" content="O's Dan — 오늘의 단어와 주제" />
+  <meta property="og:description" content="이 세상에 있는 모든 주제와 단어들 중 매일 새로운 단어와 주제를 만나보세요." />
+  <meta property="og:url" content="https://jeondusan-cloud.github.io/odan/" />
+  <meta property="og:locale" content="ko_KR" />
+
+  <!-- 검색 엔진 구조화 데이터 (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "O's Dan",
+    "alternateName": ["O Dan", "오즈단", "오늘의 단어와 주제"],
+    "url": "https://jeondusan-cloud.github.io/odan/",
+    "description": "매일 새로운 오늘의 단어와 세상의 모든 주제를 추출하는 웹 사이트"
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- 상단 헤더: 정중앙 O's Dan 브랜드 & 우측 상단 햄버거 버튼 + 오른쪽 주제 메뉴 -->
+  <header class="site-header">
+    <div class="header-spacer" aria-hidden="true"></div>
+    <h1 class="brand-logo" id="brandHomeBtn" title="O's Dan 홈">O's Dan</h1>
+
+    <div class="menu-container">
+      <button
+        type="button"
+        class="hamburger-btn"
+        id="hamburgerBtn"
+        aria-label="주제 메뉴 열기"
+        aria-expanded="false"
+        aria-controls="topicDropdown"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <!-- 햄버거 클릭 시 오른쪽에 주르륵 뜨는 주제 목록 -->
+      <nav class="topic-dropdown" id="topicDropdown" aria-label="주제 선택">
+        <div class="topic-dropdown-header">주제 선택</div>
+        <ul class="topic-list">
+          <li class="topic-item" style="--item-idx: 0">
+            <button type="button" class="topic-link active" data-spectrum="osdan">
+              <span class="topic-dot dot-osdan"></span>
+              <span class="topic-text">O's Dan</span>
+            </button>
+          </li>
+          <li class="topic-item" style="--item-idx: 1">
+            <button type="button" class="topic-link" data-spectrum="all">
+              <span class="topic-dot dot-all"></span>
+              <span class="topic-text">전체 무작위</span>
+            </button>
+          </li>
+          <li class="topic-item" style="--item-idx: 2">
+            <button type="button" class="topic-link" data-spectrum="word">
+              <span class="topic-dot dot-word"></span>
+              <span class="topic-text">단어 · 낱말</span>
+            </button>
+          </li>
+          <li class="topic-item" style="--item-idx: 3">
+            <button type="button" class="topic-link" data-spectrum="wiki">
+              <span class="topic-dot dot-wiki"></span>
+              <span class="topic-text">실시간 백과사전 (Wiki)</span>
+            </button>
+          </li>
+          <li class="topic-item" style="--item-idx: 4">
+            <button type="button" class="topic-link" data-spectrum="science">
+              <span class="topic-dot dot-science"></span>
+              <span class="topic-text">과학 · 수학 · 자연</span>
+            </button>
+          </li>
+          <li class="topic-item" style="--item-idx: 5">
+            <button type="button" class="topic-link" data-spectrum="humanities">
+              <span class="topic-dot dot-humanities"></span>
+              <span class="topic-text">철학 · 예술 · 사유</span>
+            </button>
+          </li>
+          <li class="topic-item" style="--item-idx: 6">
+            <button type="button" class="topic-link" data-spectrum="system">
+              <span class="topic-dot dot-system"></span>
+              <span class="topic-text">시스템 · 패러다임</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 배경 클릭 시 메뉴 닫기용 투명 오버레이 -->
+  <div class="menu-backdrop" id="menuBackdrop" aria-hidden="true"></div>
+
+  <!-- 중앙 메인 영역: 좌우 < > 화살표 + 가운데 사각형 카드 -->
+  <main class="center-stage">
+    <div class="stage-row">
+      <!-- 왼쪽 화살표 (<) : O's Dan 외의 주제에서만 표시 -->
+      <button
+        type="button"
+        class="side-arrow-btn hidden"
+        id="prevWordBtn"
+        aria-label="이전 또는 새로운 단어 보기"
+        title="이전/새로운 단어 (<)"
+      >
+        &lt;
+      </button>
+
+      <!-- 가운데 사각형 카드 -->
+      <section class="today-card-wrap" id="todayCardWrap" aria-live="polite">
+        <!-- 푸른색 계열 3가지 색을 섞은 곡선 SVG 장식 (상단 곡선 흐름) -->
+        <svg class="curve-art curve-top" viewBox="0 0 600 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M-20 95 C 140 10, 320 130, 620 25" stroke="#bae6fd" stroke-width="14" stroke-linecap="round" />
+          <path d="M-10 70 C 180 120, 390 -10, 615 65" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" />
+          <path d="M10 45 C 210 -15, 360 105, 595 35" stroke="#1d4ed8" stroke-width="4" stroke-linecap="round" />
+        </svg>
+
+        <!-- 단어/주제 본문 -->
+        <div class="today-content" id="todayContentBox">
+          <span class="today-date" id="todayDateText">2026. 10. 31</span>
+          <div class="today-badges">
+            <span class="today-spectrum-pill" id="todaySpectrumPill">O's Dan · 오늘의 단어</span>
+            <span class="today-category" id="todayCategoryText">오늘의 단어</span>
+          </div>
+          <h2 class="today-word" id="todayWordTitle">윤슬</h2>
+          <p class="today-subtitle" id="todayWordSub">Sun-glitter</p>
+          <p class="today-desc" id="todayWordDesc">
+            햇빛이나 달빛에 비치어 반짝이는 잔물결을 뜻하는 순우리말입니다.
+          </p>
+        </div>
+
+        <!-- 푸른색 계열 3가지 색을 섞은 곡선 SVG 장식 (하단 곡선 흐름) -->
+        <svg class="curve-art curve-bottom" viewBox="0 0 600 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M-15 35 C 190 115, 380 -10, 620 80" stroke="#bae6fd" stroke-width="14" stroke-linecap="round" />
+          <path d="M-20 65 C 160 -15, 370 115, 610 35" stroke="#0ea5e9" stroke-width="8" stroke-linecap="round" />
+          <path d="M5 85 C 220 25, 410 95, 590 20" stroke="#1e40af" stroke-width="4" stroke-linecap="round" />
+        </svg>
+      </section>
+
+      <!-- 오른쪽 화살표 (>) : O's Dan 외의 주제에서만 표시 -->
+      <button
+        type="button"
+        class="side-arrow-btn hidden"
+        id="nextWordBtn"
+        aria-label="새로운 단어나 주제 보기"
+        title="새로운 단어/주제 (>)"
+      >
+        &gt;
+      </button>
+    </div>
+  </main>
+
+  <!-- 데이터 및 스크립트 -->
+  <script src="js/lexicon.js"></script>
+  <script src="js/wiki-service.js"></script>
+  <script src="js/daily.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
